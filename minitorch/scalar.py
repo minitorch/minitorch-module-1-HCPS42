@@ -163,9 +163,12 @@ class Scalar:
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        # TODO: Implement for Task 1.3.
-        raise NotImplementedError("Need to implement for Task 1.3")
-
+        fn = h.last_fn
+        ctx = h.ctx
+        inputs = h.inputs
+        gradients = fn.backward(ctx, d_output)
+        return [(input_var, grad) for input_var, grad in zip(inputs, gradients)]
+        
     def backward(self, d_output: Optional[float] = None) -> None:
         """
         Calls autodiff to fill in the derivatives for the history of this object.
