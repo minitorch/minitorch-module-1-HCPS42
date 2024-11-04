@@ -107,7 +107,7 @@ class Scalar:
         return EQ.apply(self, b)
 
     def __sub__(self, b: ScalarLike) -> Scalar:
-        return Add.apply(self, -b)
+        return Add.apply(self, Neg.apply(b))
 
     def __neg__(self) -> Scalar:
         return Neg.apply(self)
@@ -167,6 +167,8 @@ class Scalar:
         ctx = h.ctx
         inputs = h.inputs
         gradients = fn.backward(ctx, d_output)
+        if isinstance(gradients, float):
+            gradients = (gradients,)
         return [(input_var, grad) for input_var, grad in zip(inputs, gradients)]
         
     def backward(self, d_output: Optional[float] = None) -> None:
